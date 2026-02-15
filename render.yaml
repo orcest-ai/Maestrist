@@ -1,12 +1,12 @@
 # Render Blueprint - agent.orcest.ai
-# Used when deploying via Render Blueprint (New > Blueprint)
-# For existing dashboard deployments: set Health Check Path to /health in Settings
+# Full OpenHands web UI (frontend + API + SocketIO)
+# For existing dashboard: set Build/Start commands and Health Check Path manually
 services:
   - type: web
     name: agent
     runtime: python
-    buildCommand: uv sync
-    startCommand: uv run -- uvicorn openhands.server.app:app --host 0.0.0.0 --port $PORT
+    buildCommand: cd frontend && npm ci && npm run build && cd .. && uv sync
+    startCommand: uv run -- uvicorn openhands.server.listen:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: OH_SECRET_KEY

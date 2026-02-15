@@ -1,27 +1,38 @@
 # Render Deployment – agent.orcest.ai
 
-## Quick fixes for existing deployments
+## Full OpenHands Web UI
 
-### 1. Root path (/) returning 404 – fixed in code
+برای نمایش رابط کاربری وب OpenHands (نه فقط API)، این تنظیمات را اعمال کنید.
 
-The app now returns a JSON response at `/` instead of 404. Redeploy to pick up the change.
+### 1. Build Command
 
-### 2. Health check (if Render probes `/`)
+در Render Dashboard → سرویس شما → **Settings** → **Build Command**:
 
-In the Render Dashboard → your service → **Settings**:
+```
+cd frontend && npm ci && npm run build && cd .. && uv sync
+```
 
-- Set **Health Check Path** to `/health` (instead of `/`)
+### 2. Start Command
 
-### 3. OH_SECRET_KEY warning
+**Settings** → **Start Command**:
 
-To persist secrets between restarts, add this env var in the Render Dashboard:
+```
+uv run -- uvicorn openhands.server.listen:app --host 0.0.0.0 --port $PORT
+```
 
-- **Environment** → **Add Environment Variable**
+### 3. Health Check Path
+
+**Settings** → **Health Check Path**: `/health`
+
+### 4. OH_SECRET_KEY (اختیاری)
+
+برای حفظ secrets بین ری‌استارت‌ها، در **Environment** متغیر اضافه کنید:
+
 - Key: `OH_SECRET_KEY`
-- Value: Generate a secure random string (e.g. `openssl rand -base64 32`)
+- Value: رشته تصادفی امن (مثلاً `openssl rand -base64 32`)
 
 ---
 
-## Blueprint deployment
+## Blueprint
 
-If using `render.yaml` (Blueprint), the health check and `OH_SECRET_KEY` are configured there.
+اگر از `render.yaml` استفاده می‌کنید، این تنظیمات به‌صورت خودکار اعمال می‌شوند.
