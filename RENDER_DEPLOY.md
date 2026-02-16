@@ -1,36 +1,38 @@
 # Render Deployment – agent.orcest.ai
 
-## روش استقرار: Docker (توصیه‌شده)
+## تنظیمات ضروری
 
-از `Dockerfile.render` استفاده می‌شود تا تمام system dependencies (tmux, git, node) داخل ایمیج نصب شوند.
+### 1. Build Command
 
-### تنظیمات Render Dashboard
+```
+cd frontend && npm ci && npm run build && cd .. && uv sync
+```
 
-1. **در Settings سرویس:**
-   - **Environment:** `Docker`
-   - **Dockerfile Path:** `Dockerfile.render`
-   - **Health Check Path:** `/health`
+### 2. Start Command
 
-2. **متغیرهای محیطی (Environment):**
+```
+uv run -- uvicorn openhands.server.listen:app --host 0.0.0.0 --port $PORT
+```
+
+### 3. Health Check Path: `/health`
+
+### 4. متغیرهای محیطی (Environment Variables)
 
 | متغیر | مقدار | توضیح |
 |-------|-------|--------|
-| `OH_APP_MODE` | `oss` | صفحه اصلی از `/` بدون login |
-| `RUNTIME` | `local` | LocalRuntime (tmux در Docker نصب است) |
+| `RUNTIME` | `cli` | CLIRuntime: بدون نیاز به tmux یا Docker |
+| `SKIP_DEPENDENCY_CHECK` | `1` | رد شدن از بررسی وابستگی‌ها |
 | `WORKSPACE_BASE` | `/tmp/workspace` | مسیر workspace |
 | `OH_SECRET_KEY` | (Generate) | حفظ secrets بین restart |
 
-3. **کلید API:**
-   - `OPENAI_API_KEY` – برای GPT-4o
-   - یا `ANTHROPIC_API_KEY` – برای Claude
-   - یا در رابط وب از **Settings → LLM** وارد کنید
+### 5. کلید API
 
-### Deploy
-
-بعد از تنظیمات بالا، **Manual Deploy** با **Clear build cache** بزنید.
+- `OPENAI_API_KEY` – برای GPT-4o
+- یا `ANTHROPIC_API_KEY` – برای Claude
+- یا در رابط وب از **Settings → LLM** وارد کنید
 
 ---
 
-## Blueprint
+## Deploy
 
-اگر از `render.yaml` استفاده می‌کنید، تنظیمات Docker به‌صورت خودکار اعمال می‌شوند.
+بعد از تنظیم env vars، **Manual Deploy** با **Clear build cache** بزنید.

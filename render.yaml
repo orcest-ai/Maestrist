@@ -1,16 +1,17 @@
 # Render Blueprint - agent.orcest.ai
-# Docker-based deployment for full OpenHands web UI with all system dependencies
+# Python native runtime with CLIRuntime (no tmux/Docker needed)
 services:
   - type: web
     name: agent
-    runtime: docker
-    dockerfilePath: Dockerfile.render
+    runtime: python
+    buildCommand: cd frontend && npm ci && npm run build && cd .. && uv sync
+    startCommand: uv run -- uvicorn openhands.server.listen:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
-      - key: OH_APP_MODE
-        value: oss
       - key: RUNTIME
-        value: local
+        value: cli
+      - key: SKIP_DEPENDENCY_CHECK
+        value: "1"
       - key: WORKSPACE_BASE
         value: /tmp/workspace
       - key: OH_SECRET_KEY
