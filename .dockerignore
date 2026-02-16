@@ -5,14 +5,10 @@ frontend/node_modules
 *.ini
 *.toml
 !pyproject.toml
-*.yml
-
-# Documentation (except README.md)
-*.md
-!README.md
 
 # Hidden files and directories
 .*
+!.nvmrc
 __pycache__
 
 # Unneded files and directories

@@ -1,20 +1,17 @@
 # Render Blueprint - agent.orcest.ai
-# Full OpenHands web UI (frontend + API + SocketIO)
-# For existing dashboard: set Build/Start commands, env vars, and Health Check Path manually
+# Docker-based deployment for full OpenHands web UI with all system dependencies
 services:
   - type: web
     name: agent
-    runtime: python
-    buildCommand: apt-get update && apt-get install -y tmux && cd frontend && npm ci && npm run build && cd .. && uv sync
-    startCommand: uv run -- uvicorn openhands.server.listen:app --host 0.0.0.0 --port $PORT
+    runtime: docker
+    dockerfilePath: Dockerfile.render
     healthCheckPath: /health
     envVars:
       - key: OH_APP_MODE
-        value: oss  # Main page at / (no login redirect). Use oss for self-hosted.
+        value: oss
       - key: RUNTIME
-        value: local  # Required on Render (no Docker). Use LocalRuntime instead of Docker.
+        value: local
       - key: WORKSPACE_BASE
-        value: /tmp/workspace  # Writable workspace for process sandbox
+        value: /tmp/workspace
       - key: OH_SECRET_KEY
-        generateValue: true  # Persists secrets between restarts (remove if already set)
-      # Add your LLM API key in Render Dashboard → Environment (e.g. OPENAI_API_KEY)
+        generateValue: true
