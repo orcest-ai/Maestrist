@@ -23,7 +23,7 @@ uv run -- uvicorn openhands.server.listen:app --host 0.0.0.0 --port $PORT
 | متغیر | مقدار | توضیح |
 |-------|-------|--------|
 | `OH_APP_MODE` | `oss` | صفحه اصلی از `/` بدون ریدایرکت به login |
-| `RUNTIME` | `process` | بدون Docker روی Render |
+| `RUNTIME` | `local` | بدون Docker روی Render (LocalRuntime) |
 | `WORKSPACE_BASE` | `/tmp/workspace` | مسیر workspace برای sandbox |
 | `OH_SECRET_KEY` | (Generate) | حفظ secrets بین ری‌استارت‌ها |
 
@@ -42,7 +42,7 @@ uv run -- uvicorn openhands.server.listen:app --host 0.0.0.0 --port $PORT
 
 اگر بعد از لاگین و وارد کردن API key خطای ۵۰۰ می‌گیرید:
 
-1. `RUNTIME=process` را حتماً تنظیم کنید (Render بدون Docker است)
+1. `RUNTIME=local` را حتماً تنظیم کنید (Render بدون Docker است)
 2. `WORKSPACE_BASE=/tmp/workspace` را اضافه کنید
 3. مطمئن شوید کلید API در Settings ذخیره شده است
 4. یک بار سرویس را Manual Deploy کنید

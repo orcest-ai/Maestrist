@@ -12,7 +12,7 @@ services:
       - key: OH_APP_MODE
         value: oss  # Main page at / (no login redirect). Use oss for self-hosted.
       - key: RUNTIME
-        value: process  # Required on Render (no Docker). Use process sandbox instead.
+        value: local  # Required on Render (no Docker). Use LocalRuntime instead of Docker.
       - key: WORKSPACE_BASE
         value: /tmp/workspace  # Writable workspace for process sandbox
       - key: OH_SECRET_KEY
