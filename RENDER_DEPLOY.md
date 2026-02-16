@@ -1,12 +1,8 @@
 # Render Deployment – agent.orcest.ai
 
-## Full OpenHands Web UI
-
-برای نمایش رابط کاربری وب OpenHands (نه فقط API)، این تنظیمات را اعمال کنید.
+## تنظیمات ضروری
 
 ### 1. Build Command
-
-در Render Dashboard → سرویس شما → **Settings** → **Build Command**:
 
 ```
 cd frontend && npm ci && npm run build && cd .. && uv sync
@@ -14,25 +10,45 @@ cd frontend && npm ci && npm run build && cd .. && uv sync
 
 ### 2. Start Command
 
-**Settings** → **Start Command**:
-
 ```
 uv run -- uvicorn openhands.server.listen:app --host 0.0.0.0 --port $PORT
 ```
 
-### 3. Health Check Path
+### 3. Health Check Path: `/health`
 
-**Settings** → **Health Check Path**: `/health`
+### 4. متغیرهای محیطی الزامی
 
-### 4. OH_SECRET_KEY (اختیاری)
+در **Environment** این متغیرها را اضافه کنید:
 
-برای حفظ secrets بین ری‌استارت‌ها، در **Environment** متغیر اضافه کنید:
+| متغیر | مقدار | توضیح |
+|-------|-------|--------|
+| `OH_APP_MODE` | `oss` | صفحه اصلی از `/` بدون ریدایرکت به login |
+| `RUNTIME` | `process` | بدون Docker روی Render |
+| `WORKSPACE_BASE` | `/tmp/workspace` | مسیر workspace برای sandbox |
+| `OH_SECRET_KEY` | (Generate) | حفظ secrets بین ری‌استارت‌ها |
 
-- Key: `OH_SECRET_KEY`
-- Value: رشته تصادفی امن (مثلاً `openssl rand -base64 32`)
+### 5. کلید API (در Settings یا Environment)
+
+یکی از این متغیرها را برای مدل پیش‌فرض تنظیم کنید:
+
+- `OPENAI_API_KEY` – برای GPT-4o
+- `ANTHROPIC_API_KEY` – برای Claude
+
+یا پس از ورود، از **Settings → LLM** کلید API را وارد کنید.
+
+---
+
+## رفع خطای ۵۰۰ در New Conversation
+
+اگر بعد از لاگین و وارد کردن API key خطای ۵۰۰ می‌گیرید:
+
+1. `RUNTIME=process` را حتماً تنظیم کنید (Render بدون Docker است)
+2. `WORKSPACE_BASE=/tmp/workspace` را اضافه کنید
+3. مطمئن شوید کلید API در Settings ذخیره شده است
+4. یک بار سرویس را Manual Deploy کنید
 
 ---
 
 ## Blueprint
 
-اگر از `render.yaml` استفاده می‌کنید، این تنظیمات به‌صورت خودکار اعمال می‌شوند.
+با `render.yaml` این تنظیمات به‌صورت خودکار اعمال می‌شوند.
