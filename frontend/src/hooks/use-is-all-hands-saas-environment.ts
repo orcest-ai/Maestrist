@@ -7,7 +7,5 @@ import { useMemo } from "react";
 export const useIsAllHandsSaaSEnvironment = (): boolean =>
   useMemo(() => {
     const { hostname } = window.location;
-    return (
-      hostname.endsWith("orcest.ai") || hostname.endsWith("maestrist.dev")
-    );
+    return hostname.endsWith("orcest.ai") || hostname.endsWith("maestrist.dev");
   }, []);
