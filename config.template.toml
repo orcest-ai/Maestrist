@@ -111,7 +111,8 @@
 api_key = ""
 
 # API base URL (For Headless / CLI only -  In Web this is overridden by Session Init)
-#base_url = ""
+# Default: RainyModel proxy (rm.orcest.ai) for unified LLM routing
+base_url = "https://rm.orcest.ai/v1"
 
 # API version
 #api_version = ""
@@ -138,7 +139,8 @@ api_key = ""
 #max_output_tokens = 0
 
 # Model to use. (For Headless / CLI only -  In Web this is overridden by Session Init)
-model = "gpt-4o"
+# Use rainymodel/agent for best routing through RainyModel proxy
+model = "rainymodel/agent"
 
 # Number of retries to attempt when an operation fails with the LLM.
 # Increase this value to allow more attempts before giving up
@@ -217,7 +219,8 @@ correct_num = 5
 
 [llm.gpt4o-mini]
 api_key = ""
-model = "gpt-4o"
+model = "rainymodel/auto"
+base_url = "https://rm.orcest.ai/v1"
 
 # Example routing LLM configuration for multimodal model routing
 # Uncomment and configure to enable model routing with a secondary model
