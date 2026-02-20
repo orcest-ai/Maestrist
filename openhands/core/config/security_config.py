@@ -19,7 +19,9 @@ class SecurityConfig(BaseModel):
     confirmation_mode: bool = Field(default=False)
     security_analyzer: str | None = Field(default=None)
 
-    model_config = ConfigDict(extra='forbid')
+    # extra='ignore' allows unknown keys (e.g. enable_security_analyzer in template)
+    # to be present without raising; only confirmation_mode and security_analyzer are used
+    model_config = ConfigDict(extra='ignore')
 
     @classmethod
     def from_toml_section(cls, data: dict) -> dict[str, 'SecurityConfig']:
